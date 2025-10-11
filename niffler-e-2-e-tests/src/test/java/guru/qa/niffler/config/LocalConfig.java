@@ -5,11 +5,16 @@ package guru.qa.niffler.config;
 
   @Override
   public String frontUrl() {
-   return "http://localhost:3000/";
+   return "http://localhost:9000/";
   }
 
   @Override
   public String spendJdbcUrl() {
    return "jdbc:postgresql://localhost:5432/niffler-spend";
+  }
+
+  @Override
+  public String spendUrl() {
+   return "http://localhost:8093/";
   }
  }
