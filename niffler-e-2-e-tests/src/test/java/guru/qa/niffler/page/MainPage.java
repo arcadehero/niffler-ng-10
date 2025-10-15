@@ -12,8 +12,7 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class MainPage {
     private final ElementsCollection tableRows = $$("#spendings tr");
-    private final SelenideElement icon= $("[data-testid='PersonIcon']");
-
+    private final SelenideElement icon = $("[data-testid='PersonIcon']");
 
 
     public EditSpendingPage editSpending(String description) {
@@ -26,12 +25,12 @@ public class MainPage {
         return this;
     }
 
-    public MainPage verifyMainPageIsOpened(){
+    public MainPage verifyMainPageIsOpened() {
         icon.shouldBe(visible);
         return this;
     }
 
-    public Profile clickOnProfileIcon(){
+    public Profile clickOnProfileIcon() {
         icon.click();
         return Selenide.page(Profile.class);
     }

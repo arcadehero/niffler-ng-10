@@ -17,24 +17,25 @@ public class SignUpPage {
     private final SelenideElement passwordErrorMessage = $x("//input[@id='password']/following-sibling::span");
     private final SelenideElement usernameErrorMessage = $x("//input[@id='username']/following-sibling::span");
 
-    public SignUpPage createNewUser(String username, String password){
+    public SignUpPage createNewUser(String username, String password) {
         usernameInput.val(username);
         passwordInput.val(password);
         passwordSubmitInput.val(password);
         signUpBtn.shouldBe(visible).click();
         return this;
     }
-    public LoginPage clickOnSignInButton(){
+
+    public LoginPage clickOnSignInButton() {
         signInBnt.shouldBe(visible).click();
         return Selenide.page(LoginPage.class);
     }
 
-    public SignUpPage verifyUsernameErrorMessageIsDisplayed(){
+    public SignUpPage verifyUsernameErrorMessageIsDisplayed() {
         usernameErrorMessage.shouldBe(visible);
         return this;
     }
 
-    public SignUpPage verifyPasswordErrorMessageIsDisplayed(){
+    public SignUpPage verifyPasswordErrorMessageIsDisplayed() {
         passwordErrorMessage.shouldBe(visible);
         return this;
     }

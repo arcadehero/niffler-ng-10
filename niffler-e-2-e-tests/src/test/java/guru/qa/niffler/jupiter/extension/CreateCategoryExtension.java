@@ -25,7 +25,7 @@ public class CreateCategoryExtension implements BeforeEachCallback, AfterTestExe
                                             null,
                                             faker.name().name(),
                                             anno.username(),
-                                            anno.archived()
+                                            false
                                     )
                             );
                             if (anno.archived()) {
@@ -66,7 +66,7 @@ public class CreateCategoryExtension implements BeforeEachCallback, AfterTestExe
     }
 
     @Override
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+    public CategoryJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         return extensionContext.getStore(NAMESPACE)
                 .get(extensionContext.getUniqueId(), CategoryJson.class);
     }

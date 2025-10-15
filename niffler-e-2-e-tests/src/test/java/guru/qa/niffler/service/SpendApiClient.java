@@ -37,7 +37,7 @@ public class SpendApiClient implements SpendClient {
         } catch (IOException e) {
             throw new AssertionError(e);
         }
-        assertEquals(response.code(), HttpStatus.SC_OK);
+        assertEquals(response.code(), HttpStatus.SC_CREATED);
         return response.body();
     }
 
@@ -89,7 +89,7 @@ public class SpendApiClient implements SpendClient {
         } catch (IOException e) {
             throw new AssertionError(e);
         }
-        assertEquals(response.code(), HttpStatus.SC_OK);
+        assertEquals(response.code(), HttpStatus.SC_ACCEPTED);
     }
 
     @Override

@@ -10,8 +10,8 @@ public class LoginPage {
     private final SelenideElement usernameInput = $("#username");
     private final SelenideElement passwordInput = $("#password");
     private final SelenideElement submitBtn = $("#login-button");
-    public final SelenideElement registerBtn = $("#register-button");
-    public final SelenideElement errorMessage = $(".form__error");
+    private final SelenideElement registerBtn = $("#register-button");
+    private final SelenideElement errorMessage = $(".form__error");
 
     public LoginPage login(String username, String password) {
         usernameInput.val(username);
