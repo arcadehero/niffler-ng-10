@@ -1,21 +1,24 @@
 package guru.qa.niffler.test.rest;
 
+import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.service.AuthApiClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import retrofit2.Response;
 
 import java.io.IOException;
 
+@ExtendWith(BrowserExtension.class)
 public class RegistrationTest {
 
-  private final AuthApiClient authApiClient = new AuthApiClient();
+    private final AuthApiClient authApiClient = new AuthApiClient();
 
-  @Test
-  @Disabled
-  void newUserShouldRegisteredByApiCall() throws IOException {
-    final Response<Void> response = authApiClient.register("bazz", "12345");
-    Assertions.assertEquals(201, response.code());
-  }
+    @Test
+    @Disabled
+    void newUserShouldRegisteredByApiCall() throws IOException {
+        final Response<Void> response = authApiClient.register("bazz", "12345");
+        Assertions.assertEquals(201, response.code());
+    }
 }

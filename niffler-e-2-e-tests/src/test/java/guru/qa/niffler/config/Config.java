@@ -7,6 +7,6 @@ public interface Config {
   }
 
   String frontUrl();
-
   String spendJdbcUrl();
+  String spendUrl();
 }
