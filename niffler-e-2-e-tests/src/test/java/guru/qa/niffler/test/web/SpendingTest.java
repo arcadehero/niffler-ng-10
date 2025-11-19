@@ -6,6 +6,7 @@ import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.page.LoginPage;
+import guru.qa.niffler.page.MainPage;
 import org.junit.jupiter.api.Test;
 
 public class SpendingTest {
@@ -24,7 +25,8 @@ public class SpendingTest {
         final String newDescription = "Обучение Niffler Next Generation";
 
         Selenide.open(CFG.frontUrl(), LoginPage.class)
-                .login("arcadehero", "12345")
+                .login("arcadehero", "12345");
+        new MainPage()
                 .editSpending(spending.description())
                 .setNewSpendingDescription(newDescription)
 //        .save()
