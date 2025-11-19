@@ -12,8 +12,7 @@ public class AllPeoplePage {
 
     public AllPeoplePage verifyOutcomeInvitationIsPresent(String username) {
         SelenideElement first = allPeopleTable.stream().findFirst().orElseThrow();
-        first.shouldHave(text(username));
-        first.shouldHave(text("Waiting..."));
+        first.shouldHave(text(username)).shouldHave(text("Waiting..."));
         return this;
     }
 }

@@ -44,12 +44,7 @@ public class UsersQueueExtension implements
                     Optional<StaticUser> user = Optional.empty();
                     StopWatch sw = StopWatch.createStarted();
                     while (user.isEmpty() && sw.getTime(TimeUnit.SECONDS) < 30) {
-                        user = switch (userType.value()) {
-                            case EMPTY -> ofNullable(EMPTY_USERS.poll());
-                            case WITH_FRIEND -> ofNullable(WITH_FRIEND_USERS.poll());
-                            case WITH_INCOME_REQUEST -> ofNullable(WITH_INCOME_REQUEST_USERS.poll());
-                            case WITH_OUTCOME_REQUEST -> ofNullable(WITH_OUTCOME_REQUEST_USERS.poll());
-                        };
+                        user = ofNullable(getQueueByType(userType.value()).poll());
                     }
                     user.ifPresentOrElse(
                             u -> {
