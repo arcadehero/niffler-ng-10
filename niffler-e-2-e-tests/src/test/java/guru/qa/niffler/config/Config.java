@@ -10,4 +10,7 @@ public interface Config {
   String spendJdbcUrl();
   String spendUrl();
   String githubUrl();
+  String userDataUrl();
+  String gatewayUrl();
+  String authUrl();
 }

@@ -3,6 +3,7 @@ package guru.qa.niffler.test.web;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Category;
+import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.CreateCategoryExtension;
 import guru.qa.niffler.model.CategoryJson;
@@ -17,10 +18,11 @@ public class CategoryTest {
 
     private static final Config CFG = Config.getInstance();
 
-    @Category(
+    @User(
             username = "arcadehero",
-            archived = true
-    )
+            categories = @Category(
+                    archived = true
+            ))
     @Test
     @DisplayName("Проверка успешного отображения заархивированной категории в списке категорий")
     void archivedCategoryShouldBePresentInCategoriesList(CategoryJson category) {
@@ -34,10 +36,11 @@ public class CategoryTest {
                 .verifyArchivedCategoryIsDisplayed(category.name());
     }
 
-    @Category(
+    @User(
             username = "arcadehero",
-            archived = true
-    )
+            categories = @Category(
+                    archived = true
+            ))
     @Test
     @DisplayName("Проверка отсутствия отображения заархивированной категории в списке категорий")
     void archivedCategoryShouldNotBePresentInCategoriesList(CategoryJson category) {
@@ -50,9 +53,9 @@ public class CategoryTest {
                 .verifyArchivedCategoryIsNotDisplayed(category.name());
     }
 
-    @Category(
+    @User(
             username = "arcadehero",
-            archived = false
+            categories = @Category()
     )
     @Test
     @DisplayName("Проверка успешного отображения активной категории в списке категорий")
