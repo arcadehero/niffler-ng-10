@@ -22,4 +22,19 @@ enum LocalConfig implements Config {
     public String githubUrl() {
         return "https://api.github.com/";
     }
+
+    @Override
+    public String userDataUrl() {
+        return "http://localhost:8089/";
+    }
+
+    @Override
+    public String gatewayUrl() {
+        return "http://localhost:8090/";
+    }
+
+    @Override
+    public String authUrl() {
+        return "http://localhost:9000/";
+    }
 }
