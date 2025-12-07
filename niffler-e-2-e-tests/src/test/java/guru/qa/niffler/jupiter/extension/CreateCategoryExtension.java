@@ -51,16 +51,14 @@ public class CreateCategoryExtension implements BeforeEachCallback, AfterTestExe
     @Override
     public void afterTestExecution(ExtensionContext context) {
         CategoryJson category = context.getStore(NAMESPACE).get(context.getUniqueId(), CategoryJson.class);
-        if (category != null) {
-            if (!category.archived()) {
-                CategoryJson archivedCategory = new CategoryJson(
-                        category.id(),
-                        category.name(),
-                        category.username(),
-                        true
-                );
-                spendClient.updateCategory(archivedCategory);
-            }
+        if (category != null && !category.archived()) {
+            CategoryJson archivedCategory = new CategoryJson(
+                    category.id(),
+                    category.name(),
+                    category.username(),
+                    true
+            );
+            spendClient.updateCategory(archivedCategory);
         }
     }
 
