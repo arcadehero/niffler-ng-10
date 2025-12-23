@@ -55,7 +55,7 @@ public class CategoryDaoJdbc implements CategoryDao {
                 ps.execute();
                 try (ResultSet rs = ps.getResultSet()) {
                     if (rs.next()) {
-                        return Optional.of(setSpendEntity(rs));
+                        return Optional.of(mapCategoryEntity(rs));
                     } else {
                         return Optional.empty();
                     }
@@ -95,7 +95,7 @@ public class CategoryDaoJdbc implements CategoryDao {
                 ps.execute();
                 try (ResultSet rs = ps.getResultSet()) {
                     if (rs.next()) {
-                        return Optional.of(setSpendEntity(rs));
+                        return Optional.of(mapCategoryEntity(rs));
                     } else {
                         return Optional.empty();
                     }
@@ -116,8 +116,8 @@ public class CategoryDaoJdbc implements CategoryDao {
                 ps.execute();
                 try (ResultSet rs = ps.getResultSet()) {
                     List<CategoryEntity> categoryEntities = new ArrayList<>();
-                    if (rs.next()) {
-                        categoryEntities.add(setSpendEntity(rs));
+                    while (rs.next()) {
+                        categoryEntities.add(mapCategoryEntity(rs));
                     }
                     return categoryEntities;
                 }
@@ -141,12 +141,12 @@ public class CategoryDaoJdbc implements CategoryDao {
         }
     }
 
-    private CategoryEntity setSpendEntity(ResultSet rs) throws SQLException {
+    private CategoryEntity mapCategoryEntity(ResultSet rs) throws SQLException {
         CategoryEntity ce = new CategoryEntity();
-        ce.setId(rs.getObject("c_id", UUID.class));
-        ce.setName(rs.getString("c_name"));
-        ce.setUsername(rs.getString("c_username"));
-        ce.setArchived(rs.getBoolean("c_archived"));
+        ce.setId(rs.getObject("id", UUID.class));
+        ce.setName(rs.getString("name"));
+        ce.setUsername(rs.getString("username"));
+        ce.setArchived(rs.getBoolean("archived"));
         return ce;
     }
 }

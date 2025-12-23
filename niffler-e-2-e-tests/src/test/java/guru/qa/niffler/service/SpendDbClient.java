@@ -1,22 +1,27 @@
 package guru.qa.niffler.service;
 
 import guru.qa.niffler.config.Config;
+import guru.qa.niffler.data.dao.CategoryDao;
+import guru.qa.niffler.data.dao.impl.CategoryDaoJdbc;
+import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import java.sql.*;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 import java.util.UUID;
 
 public class SpendDbClient implements SpendClient {
 
     private static final Config CFG = Config.getInstance();
+    private final CategoryDao categoryDao = new CategoryDaoJdbc();
 
     @Override
     public SpendJson createSpend(SpendJson spend) {
@@ -130,5 +135,10 @@ public class SpendDbClient implements SpendClient {
         } catch (Exception e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public CategoryJson updateCategory(CategoryJson category) {
+        return CategoryJson.fromEntity(categoryDao.update(CategoryEntity.fromJson(category)));
     }
 }

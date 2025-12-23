@@ -54,18 +54,25 @@ public class SpendDaoJdbc implements SpendDao {
     public Optional<SpendEntity> findSpendById(UUID spend) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM spend s," +
-                            "c.id as c_id," +
-                            "c.name as c_name," +
-                            "c.username as c_username," +
-                            "c.archived as c_archived," +
-                            "LEFT JOIN category c ON s.category.id = c.id WHERE id = ?"
+                    "SELECT " +
+                            "s.id, " +
+                            "s.username, " +
+                            "s.spend_date, " +
+                            "s.currency, " +
+                            "s.amount, " +
+                            "s.description, " +
+                            "c.id as c_id, " +
+                            "c.name as c_name, " +
+                            "c.username as c_username, " +
+                            "c.archived as c_archived " +
+                            "FROM spend s " +
+                            "LEFT JOIN category c ON s.category_id = c.id WHERE s.id = ?"
             )) {
                 ps.setObject(1, spend);
                 ps.execute();
                 try (ResultSet rs = ps.getResultSet()) {
                     if (rs.next()) {
-                        return Optional.of(setSpendEntity(rs));
+                        return Optional.of(mapSpendEntity(rs));
                     } else {
                         return Optional.empty();
                     }
@@ -80,19 +87,26 @@ public class SpendDaoJdbc implements SpendDao {
     public List<SpendEntity> findAllByUserName(String username) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM spend s," +
-                            "c.id as c_id," +
-                            "c.name as c_name," +
-                            "c.username as c_username," +
-                            "c.archived as c_archived," +
-                            "LEFT JOIN category c ON s.category.id = c.id WHERE s.username = ?"
+                    "SELECT " +
+                            "s.id, " +
+                            "s.username, " +
+                            "s.spend_date, " +
+                            "s.currency, " +
+                            "s.amount, " +
+                            "s.description, " +
+                            "c.id as c_id, " +
+                            "c.name as c_name, " +
+                            "c.username as c_username, " +
+                            "c.archived as c_archived " +
+                            "FROM spend s " +
+                            "LEFT JOIN category c ON s.category_id = c.id WHERE s.username = ?"
             )) {
                 ps.setObject(1, username);
                 ps.execute();
                 try (ResultSet rs = ps.getResultSet()) {
                     List<SpendEntity> spendEntities = new ArrayList<>();
-                    if (rs.next()) {
-                        spendEntities.add(setSpendEntity(rs));
+                    while (rs.next()) {
+                        spendEntities.add(mapSpendEntity(rs));
                     }
                     return spendEntities;
                 }
@@ -116,7 +130,7 @@ public class SpendDaoJdbc implements SpendDao {
         }
     }
 
-    private SpendEntity setSpendEntity(ResultSet rs) throws SQLException {
+    private SpendEntity mapSpendEntity(ResultSet rs) throws SQLException {
         CategoryEntity ce = new CategoryEntity();
         ce.setId(rs.getObject("c_id", UUID.class));
         ce.setName(rs.getString("c_name"));
@@ -127,7 +141,7 @@ public class SpendDaoJdbc implements SpendDao {
         se.setId(rs.getObject("id", UUID.class));
         se.setUsername(rs.getString("username"));
         se.setSpendDate(rs.getDate("spend_date"));
-        se.setCurrency(rs.getObject("currency", CurrencyValues.class));
+        se.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
         se.setAmount(rs.getDouble("amount"));
         se.setDescription(rs.getString("description"));
         se.setCategory(ce);

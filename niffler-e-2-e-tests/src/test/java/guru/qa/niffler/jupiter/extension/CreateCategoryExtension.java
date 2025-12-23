@@ -27,18 +27,9 @@ public class CreateCategoryExtension implements BeforeEachCallback, AfterTestExe
                                                 null,
                                                 RandomDataUtils.randomName(),
                                                 anno.username(),
-                                                false
+                                                category.archived()
                                         )
                                 );
-                                if (category.archived()) {
-                                    CategoryJson archivedCategory = new CategoryJson(
-                                            createdCategory.id(),
-                                            createdCategory.name(),
-                                            createdCategory.username(),
-                                            true
-                                    );
-                                    createdCategory = spendClient.createCategory(archivedCategory);
-                                }
                                 context.getStore(NAMESPACE).put(
                                         context.getUniqueId(),
                                         createdCategory
@@ -58,7 +49,7 @@ public class CreateCategoryExtension implements BeforeEachCallback, AfterTestExe
                     category.username(),
                     true
             );
-            spendClient.createCategory(archivedCategory);
+            spendClient.updateCategory(archivedCategory);
         }
     }
 

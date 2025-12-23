@@ -18,7 +18,7 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
     public UserEntity createUser(UserEntity user) {
         try (Connection connection = Databases.connection(CFG.userDataUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO user (username, currency, firstname, surname, photo, photo_small, full_name) " +
+                    "INSERT INTO \"user\" (username, currency, firstname, surname, photo, photo_small, full_name) " +
                             "VALUES (?, ?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS
             )) {
@@ -51,22 +51,13 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
     public Optional<UserEntity> findById(UUID id) {
         try (Connection connection = Databases.connection(CFG.userDataUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM user WHERE id = ?"
+                    "SELECT * FROM \"user\" WHERE id = ?"
             )) {
                 ps.setObject(1, id);
                 ps.executeQuery();
                 try (ResultSet rs = ps.getResultSet()) {
                     if (rs.next()) {
-                        UserEntity user = new UserEntity();
-                        user.setId(rs.getObject("id", UUID.class));
-                        user.setUsername(rs.getString("username"));
-                        user.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
-                        user.setFirstname(rs.getString("firstname"));
-                        user.setSurname(rs.getString("surname"));
-                        user.setPhoto(rs.getObject("photo", byte[].class));
-                        user.setPhotoSmall(rs.getObject("photo_small", byte[].class));
-                        user.setFullname(rs.getString("fullname"));
-                        return Optional.of(user);
+                        return Optional.of(mapUserEntity(rs));
                     } else {
                         return Optional.empty();
                     }
@@ -81,22 +72,13 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
     public Optional<UserEntity> findByUsername(String username) {
         try (Connection connection = Databases.connection(CFG.userDataUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM user WHERE username = ? "
+                    "SELECT * FROM \"user\" WHERE username = ? "
             )) {
                 ps.setObject(1, username);
                 ps.executeQuery();
                 try (ResultSet rs = ps.getResultSet()) {
                     if (rs.next()) {
-                        UserEntity user = new UserEntity();
-                        user.setId(rs.getObject("id", UUID.class));
-                        user.setUsername(rs.getString("username"));
-                        user.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
-                        user.setFirstname(rs.getString("firstname"));
-                        user.setSurname(rs.getString("surname"));
-                        user.setPhoto(rs.getObject("photo", byte[].class));
-                        user.setPhotoSmall(rs.getObject("photo_small", byte[].class));
-                        user.setFullname(rs.getString("fullname"));
-                        return Optional.of(user);
+                        return Optional.of(mapUserEntity(rs));
                     } else {
                         return Optional.empty();
                     }
@@ -111,7 +93,7 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
     public void delete(UserEntity user) {
         try (Connection connection = Databases.connection(CFG.userDataUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "DELETE * FROM user WHERE id = ? "
+                    "DELETE * FROM \"user\" WHERE id = ? "
             )) {
                 ps.setObject(1, user.getId());
                 ps.execute();
@@ -119,5 +101,18 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private UserEntity mapUserEntity(ResultSet rs) throws SQLException {
+        UserEntity user = new UserEntity();
+        user.setId(rs.getObject("id", UUID.class));
+        user.setUsername(rs.getString("username"));
+        user.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
+        user.setFirstname(rs.getString("firstname"));
+        user.setSurname(rs.getString("surname"));
+        user.setPhoto(rs.getBytes("photo"));
+        user.setPhotoSmall(rs.getBytes("photo_small"));
+        user.setFullname(rs.getString("full_name"));
+        return user;
     }
 }

@@ -4,6 +4,7 @@ import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@ToString
 public class SpendEntity implements Serializable {
     private UUID id;
     private String username;

@@ -1,18 +1,17 @@
 package guru.qa.niffler.data.entity.spend;
 
-import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.CategoryJson;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
 @Setter
-public class CategoryEntity  implements Serializable {
-
-    private static final Config CFG = Config.getInstance();
+@ToString
+public class CategoryEntity implements Serializable {
 
     private UUID id;
     private String name;
