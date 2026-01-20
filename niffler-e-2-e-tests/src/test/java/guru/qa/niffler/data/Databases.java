@@ -5,12 +5,10 @@ import com.atomikos.jdbc.AtomikosDataSourceBean;
 import jakarta.transaction.SystemException;
 import jakarta.transaction.UserTransaction;
 import org.apache.commons.lang3.StringUtils;
-import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -18,7 +16,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static java.sql.Connection.TRANSACTION_READ_COMMITTED;
+
 public class Databases {
+
     private Databases() {
     }
 
@@ -28,17 +29,14 @@ public class Databases {
     public record XaFunction<T>(Function<Connection, T> function, String jdbc) {
     }
 
-    ;
-
     public record XaConsumer(Consumer<Connection> function, String jdbc) {
     }
 
-    ;
-
-    public static <T> T transaction(Function<Connection, T> function, String jdbc) {
+    public static <T> T transaction(Function<Connection, T> function, String jdbc, int isolationLevel) {
         Connection connection = null;
         try {
             connection = connection(jdbc);
+            connection.setTransactionIsolation(isolationLevel);
             connection.setAutoCommit(false);
             T result = function.apply(connection);
             connection.commit();
@@ -56,6 +54,11 @@ public class Databases {
             throw new RuntimeException(e);
         }
     }
+
+    public static <T> T transaction(Function<Connection, T> function, String jdbcUrl) {
+        return transaction(function, jdbcUrl, TRANSACTION_READ_COMMITTED);
+    }
+
 
     public static <T> T xaTransaction(XaFunction<T>... actions) {
         UserTransaction ut = new UserTransactionImp();
@@ -78,8 +81,7 @@ public class Databases {
         }
     }
 
-
-    public static void transaction(Consumer<Connection> consumer, String jdbc) {
+    public static void transaction(Consumer<Connection> consumer, String jdbc, int isolationLvl) {
         Connection connection = null;
         try {
             connection = connection(jdbc);
@@ -98,6 +100,10 @@ public class Databases {
             }
             throw new RuntimeException(e);
         }
+    }
+
+    public static void transaction(Consumer<Connection> consumer, String jdbcUrl) {
+        transaction(consumer, jdbcUrl, TRANSACTION_READ_COMMITTED);
     }
 
     public static void xaTransaction(XaConsumer... actions) {
@@ -169,8 +175,8 @@ public class Databases {
             for (Connection connection : connectionMap.values()) {
                 try {
                     if (connection != null && !connection.isClosed()) {
+                        connection.close();
                     }
-                    connection.close();
                 } catch (SQLException e) {
                     // NOP
                 }

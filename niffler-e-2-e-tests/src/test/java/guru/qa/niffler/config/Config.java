@@ -12,5 +12,5 @@ public interface Config {
   String githubUrl();
   String userDataUrl();
   String gatewayUrl();
-  String authUrl();
+  String authJdbcUrl();
 }
