@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-public class UserEntity {
+public class UserDataUserEntity {
 
     private UUID id;
     private String username;
