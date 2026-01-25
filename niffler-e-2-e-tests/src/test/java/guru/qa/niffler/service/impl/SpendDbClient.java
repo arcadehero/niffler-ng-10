@@ -112,7 +112,6 @@ public class SpendDbClient implements SpendClient {
 
     @Override
     public CategoryJson updateCategory(CategoryJson category) {
-//        return CategoryJson.fromEntity(categoryDao.update(CategoryEntity.fromJson(category)));
-        return null;
+        throw new UnsupportedOperationException("updateCategory not implemented yet");
     }
 }
